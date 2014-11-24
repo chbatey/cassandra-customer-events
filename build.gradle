@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
+
+jar {
+    baseName = 'customer-events'
+    version = '0.0.1-SNAPSHOT'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.datastax.cassandra:cassandra-driver-core:2.1.2'
+    compile 'com.datastax.cassandra:cassandra-driver-mapping:2.1.2'
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'org.scassandra', name: 'java-client', version: '0.3'
+}
+
+
+buildscript {
+    ext {
+        springBootVersion = '1.1.9.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}
