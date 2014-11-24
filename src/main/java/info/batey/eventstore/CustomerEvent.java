@@ -5,22 +5,25 @@ import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
 @Table(keyspace = "customers", name = "customer_events")
 public class CustomerEvent {
     @PartitionKey
+    @Column(name = "customer_id")
     private String customerId;
 
     @ClusteringColumn()
     private UUID time;
 
+    @Column(name = "staff_id")
     private String staffId;
 
+    @Column(name = "store_type")
     private String storeType;
 
+    @Column(name = "event_type")
     private String eventType;
 
     private Map<String, String> tags;
@@ -32,6 +35,9 @@ public class CustomerEvent {
         this.storeType = storeType;
         this.eventType = eventType;
         this.tags = tags;
+    }
+
+    public CustomerEvent() {
     }
 
     public String getCustomerId() {

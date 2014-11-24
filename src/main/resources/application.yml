@@ -1,4 +1,3 @@
-cassandra:
-  host: localhost
-
 host: localhost
+
+spring.profiles.active: mapping
