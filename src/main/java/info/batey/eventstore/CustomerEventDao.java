@@ -1,9 +1,6 @@
 package info.batey.eventstore;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
+import com.datastax.driver.core.*;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.utils.UUIDs;
@@ -48,6 +45,7 @@ public class CustomerEventDao {
                 .all().stream()
                 .map(mapCustomerEvent())
                 .collect(Collectors.toList());
+
     }
 
     public List<CustomerEvent> getCustomerEventsForTime(String customerId, long startTime, long endTime) {
