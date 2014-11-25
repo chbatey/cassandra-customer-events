@@ -24,7 +24,8 @@ public class Application {
     public Session session() {
         return Cluster.builder()
                 .addContactPoint(cassandraConfig.getHost())
-                .build().connect();
+                .build()
+                .connect();
     }
 
     public static void main(String[] args) {
