@@ -21,6 +21,12 @@ public class CustomerEventController {
         return customerEventDao.getAllCustomerEvents().all();
     }
 
+
+    @RequestMapping("/events-type")
+    public Iterable<CustomerEventType> getEventsWithStoreType() {
+        return customerEventDao.getAllCustomerEventsWithStoreType().all();
+    }
+
     @RequestMapping("/events/{customerId}")
     public Iterable<CustomerEvent> getEventsForTime(@PathVariable String customerId,
                                                 @RequestParam(required = false) Long startTime,

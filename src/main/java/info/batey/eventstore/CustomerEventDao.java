@@ -14,4 +14,9 @@ public interface CustomerEventDao {
 
     @Query("select * from customers.customer_events where customer_id = :customerId and time > minTimeuuid(:startTime) and time < maxTimeuuid(:endTime)")
     Result<CustomerEvent> getCustomerEventsForTime(String customerId, long startTime, long endTime);
+
+    @Query("select * from customers.customer_events_type")
+    Result<CustomerEventType> getAllCustomerEventsWithStoreType();
+
+
 }

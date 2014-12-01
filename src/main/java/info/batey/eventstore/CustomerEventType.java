@@ -6,8 +6,8 @@ import com.datastax.driver.mapping.annotations.*;
 import java.util.Map;
 import java.util.UUID;
 
-@Table(keyspace = "customers", name = "customer_events")
-public class CustomerEvent {
+@Table(keyspace = "customers", name = "customer_events_type")
+public class CustomerEventType {
     @PartitionKey
     @Column(name = "customer_id")
     private String customerId;
@@ -18,25 +18,24 @@ public class CustomerEvent {
     @Column(name = "staff_id")
     private String staffId;
 
-    @Column(name = "store_type")
-    @Enumerated(EnumType.STRING) // could be EnumType.ORDINAL
-    private StoreType storeType;
+    @Frozen
+    private Store store;
 
     @Column(name = "event_type")
     private String eventType;
 
     private Map<String, String> tags;
 
-    public CustomerEvent(String customerId, UUID time, String staffId, StoreType storeType, String eventType, Map<String, String> tags) {
+    public CustomerEventType(String customerId, UUID time, String staffId, Store store, String eventType, Map<String, String> tags) {
         this.customerId = customerId;
         this.time = time;
         this.staffId = staffId;
-        this.storeType = storeType;
+        this.store = store;
         this.eventType = eventType;
         this.tags = tags;
     }
 
-    public CustomerEvent() {
+    public CustomerEventType() {
     }
 
     public String getCustomerId() {
@@ -63,12 +62,12 @@ public class CustomerEvent {
         this.time = time;
     }
 
-    public StoreType getStoreType() {
-        return storeType;
+    public Store getStore() {
+        return store;
     }
 
-    public void setStoreType(StoreType storeType) {
-        this.storeType = storeType;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public String getEventType() {

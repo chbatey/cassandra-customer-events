@@ -1,6 +1,7 @@
 package info.batey.eventstore;
 
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.ProtocolVersion;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.MappingManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class Application {
     @Bean
     public Session session() {
         return Cluster.builder()
+                .withProtocolVersion(ProtocolVersion.V3)
                 .addContactPoint(cassandraConfig.getHost())
                 .build().connect();
     }
@@ -36,7 +38,6 @@ public class Application {
         MappingManager mappingManager = new MappingManager(session);
         return mappingManager.createAccessor(CustomerEventDao.class);
     }
-
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
