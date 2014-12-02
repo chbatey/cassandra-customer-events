@@ -35,7 +35,7 @@ public class CustomerEventDaoAsync {
     }
 
     @PostConstruct
-    public void prepareSatements() {
+    public void prepareStatements() {
         getEventsForCustomer = session.prepare("select * from customers.customer_events where customer_id = ?");
     }
 

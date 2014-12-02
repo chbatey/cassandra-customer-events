@@ -9,7 +9,7 @@ public class Sandbox {
         Cluster cluster = Cluster.builder().addContactPoint("localhost").build();
 
         CustomerEventDaoAsync customerEventDao = new CustomerEventDaoAsync(cluster.connect("customers"));
-        customerEventDao.prepareSatements();
+        customerEventDao.prepareStatements();
 
         Observable<CustomerEvent> chbatey = customerEventDao.getCustomerEventsObservable("chbatey");
 
