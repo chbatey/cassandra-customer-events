@@ -15,6 +15,9 @@ public class CassandraConfig {
     @NotNull
     private String keyspace;
 
+    @NotNull
+    private Integer port;
+
     public String getHost() {
         return host;
     }
@@ -23,6 +26,13 @@ public class CassandraConfig {
         return keyspace;
     }
 
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
 
     public void setHost(String host) {
         this.host = host;
@@ -30,5 +40,14 @@ public class CassandraConfig {
 
     public void setKeyspace(String keyspace) {
         this.keyspace = keyspace;
+    }
+
+    @Override
+    public String toString() {
+        return "CassandraConfig{" +
+                "host='" + host + '\'' +
+                ", keyspace='" + keyspace + '\'' +
+                ", port=" + port +
+                '}';
     }
 }

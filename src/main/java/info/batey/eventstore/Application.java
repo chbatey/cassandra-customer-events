@@ -8,6 +8,8 @@ import info.batey.eventstore.dao.KafkaEventStore;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
 import kafka.serializer.StringEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -15,6 +17,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.Properties;
 
@@ -22,7 +25,10 @@ import java.util.Properties;
 @EnableAutoConfiguration
 @ComponentScan
 @EnableConfigurationProperties({CassandraConfig.class, KafkaConfig.class})
+@PropertySource({"classpath:application.yml", "classpath:override.yml"})
 public class Application {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     @Autowired
     private CassandraConfig cassandraConfig;
@@ -32,8 +38,10 @@ public class Application {
 
     @Bean
     public Session session() {
+        LOGGER.info("Using cassandra config {}", cassandraConfig);
         return Cluster.builder()
                 .addContactPoint(cassandraConfig.getHost())
+                .withPort(cassandraConfig.getPort())
                 .build()
                 .connect(cassandraConfig.getKeyspace());
     }

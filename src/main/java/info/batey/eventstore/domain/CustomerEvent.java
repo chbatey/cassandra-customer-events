@@ -1,7 +1,6 @@
 package info.batey.eventstore.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.UUID;
 
@@ -95,5 +94,48 @@ public class CustomerEvent {
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerEvent{" +
+                "customerId='" + customerId + '\'' +
+                ", staffId='" + staffId + '\'' +
+                ", storeType='" + storeType + '\'' +
+                ", group='" + group + '\'' +
+                ", content='" + content + '\'' +
+                ", time=" + time +
+                ", eventType='" + eventType + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CustomerEvent that = (CustomerEvent) o;
+
+        if (content != null ? !content.equals(that.content) : that.content != null) return false;
+        if (customerId != null ? !customerId.equals(that.customerId) : that.customerId != null) return false;
+        if (eventType != null ? !eventType.equals(that.eventType) : that.eventType != null) return false;
+        if (group != null ? !group.equals(that.group) : that.group != null) return false;
+        if (staffId != null ? !staffId.equals(that.staffId) : that.staffId != null) return false;
+        if (storeType != null ? !storeType.equals(that.storeType) : that.storeType != null) return false;
+        if (time != null ? !time.equals(that.time) : that.time != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = customerId != null ? customerId.hashCode() : 0;
+        result = 31 * result + (staffId != null ? staffId.hashCode() : 0);
+        result = 31 * result + (storeType != null ? storeType.hashCode() : 0);
+        result = 31 * result + (group != null ? group.hashCode() : 0);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        result = 31 * result + (eventType != null ? eventType.hashCode() : 0);
+        return result;
     }
 }

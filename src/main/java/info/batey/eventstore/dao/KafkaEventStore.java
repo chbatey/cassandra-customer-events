@@ -2,15 +2,12 @@ package info.batey.eventstore.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import info.batey.eventstore.KafkaConfig;
 import info.batey.eventstore.domain.CustomerEvent;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 public class KafkaEventStore implements EventStore {
 

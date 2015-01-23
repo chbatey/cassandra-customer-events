@@ -17,16 +17,15 @@ public class CustomerEventController {
     @Autowired
     private CustomerEventDao customerEventDao;
 
-    @RequestMapping(value = "/event", method = {RequestMethod.GET})
+    @RequestMapping(value = "/api/event", method = {RequestMethod.GET})
     public List<CustomerEvent> getEvents() {
         return customerEventDao.getAllCustomerEvents();
     }
 
-    @RequestMapping(value = "/event/{customerId}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/api/event/{customerId}", method = {RequestMethod.GET})
     public List<CustomerEvent> getEventsForTime(@PathVariable String customerId,
                                                 @RequestParam(required = false) Long startTime,
                                                 @RequestParam(required = false) Long endTime) {
-
         if (startTime != null && endTime != null) {
             LOGGER.info("Getting events from {} to {} for customer {}", startTime, endTime, customerId);
             return customerEventDao.getCustomerEventsForTime(customerId, startTime, endTime);

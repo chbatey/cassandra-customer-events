@@ -46,7 +46,7 @@ public class CustomerEventDao {
     }
 
     public List<CustomerEvent> getAllCustomerEvents() {
-        return session.execute("select * from customers.customer_events")
+        return session.execute("select * from customer_events")
                 .all().stream()
                 .map(mapCustomerEvent())
                 .collect(Collectors.toList());
