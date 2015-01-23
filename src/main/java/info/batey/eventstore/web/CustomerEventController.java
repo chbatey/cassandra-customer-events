@@ -1,13 +1,11 @@
-package info.batey.eventstore;
+package info.batey.eventstore.web;
 
+import info.batey.eventstore.domain.CustomerEvent;
+import info.batey.eventstore.dao.CustomerEventDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,12 +17,12 @@ public class CustomerEventController {
     @Autowired
     private CustomerEventDao customerEventDao;
 
-    @RequestMapping("/events")
+    @RequestMapping(value = "/event", method = {RequestMethod.GET})
     public List<CustomerEvent> getEvents() {
         return customerEventDao.getAllCustomerEvents();
     }
 
-    @RequestMapping("/events/{customerId}")
+    @RequestMapping(value = "/event/{customerId}", method = {RequestMethod.GET})
     public List<CustomerEvent> getEventsForTime(@PathVariable String customerId,
                                                 @RequestParam(required = false) Long startTime,
                                                 @RequestParam(required = false) Long endTime) {

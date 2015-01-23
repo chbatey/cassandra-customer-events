@@ -1,9 +1,10 @@
-package info.batey.eventstore;
+package info.batey.eventstore.dao;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.utils.UUIDs;
+import info.batey.eventstore.domain.CustomerEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class CustomerEventDao {
 
     @PostConstruct
     public void prepareStatements() {
-        getEventsForCustomer = session.prepare("select * from customers.customer_events where customer_id = ?");
+        getEventsForCustomer = session.prepare("select * from customer_events where customer_id = ?");
     }
 
     public List<CustomerEvent> getCustomerEvents(String customerId) {
@@ -55,7 +56,7 @@ public class CustomerEventDao {
     public List<CustomerEvent> getCustomerEventsForTime(String customerId, long startTime, long endTime) {
         Select.Where getCustomers = QueryBuilder.select()
                 .all()
-                .from("customers", "customer_events")
+                .from("customer_events")
                 .where(eq("customer_id", customerId))
                 .and(gt("time", UUIDs.startOf(startTime)))
                 .and(lt("time", UUIDs.endOf(endTime)));
@@ -70,10 +71,12 @@ public class CustomerEventDao {
     private Function<Row, CustomerEvent> mapCustomerEvent() {
         return row -> new CustomerEvent(
                 row.getString("customer_id"),
-                row.getUUID("time"),
                 row.getString("staff_id"),
                 row.getString("store_type"),
-                row.getString("event_type"),
-                row.getMap("tags", String.class, String.class));
+                row.getString("group"),
+                row.getString("content"),
+                row.getUUID("time"),
+                row.getString("event_type")
+                );
     }
 }

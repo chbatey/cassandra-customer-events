@@ -1,6 +1,8 @@
 package info.batey.eventstore;
 
 import com.datastax.driver.core.Cluster;
+import info.batey.eventstore.dao.CustomerEventDaoAsync;
+import info.batey.eventstore.domain.CustomerEvent;
 import rx.Observable;
 
 public class Sandbox {

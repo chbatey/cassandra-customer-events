@@ -18,16 +18,19 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'io.reactivex:rxjava:1.0.1'
+    compile('org.apache.kafka:kafka_2.10:0.8.0') {
+        exclude module: 'slf4j-simple'
+    }
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile group: 'org.scassandra', name: 'java-client', version: '0.3'
+    testCompile group: 'org.scassandra', name: 'java-client', version: '0.5'
 }
 
 
 buildscript {
     ext {
-        springBootVersion = '1.1.9.RELEASE'
+        springBootVersion = '1.2.1.RELEASE'
     }
     repositories {
         mavenCentral()

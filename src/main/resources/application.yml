@@ -1,4 +1,7 @@
 cassandra:
   host: localhost
+  keyspace: events
 
-host: localhost
+kafka:
+  brokerlist: 192.168.86.10:9092
+  topic: Events
