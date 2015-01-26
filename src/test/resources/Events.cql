@@ -11,3 +11,6 @@ CREATE TABLE customer_events (
 insert into customer_events(customer_id, time , staff_id, store_type, group, content, event_type)
     VALUES ( 'chbatey', c8236b90-a316-11e4-871a-bb9f5ed27228, 'trevor', 'online', 'NEW_CUSTOMER', 'awesome content', 'BASKET_ADD');
 
+insert into customer_events(customer_id, time , staff_id, store_type, group, content, event_type)
+    VALUES ( 'billy', c8236b90-a316-11e4-871a-bb9f5ed27228, 'trevor', 'online', 'NEW_CUSTOMER', 'awesome content', 'BASKET_ADD');
+
