@@ -25,7 +25,7 @@ public class KafkaEventStore implements EventStore {
 
     @Override
     public void storeEvent(CustomerEvent event) {
-        String serialisedEvent = null;
+        String serialisedEvent;
         try {
             serialisedEvent = om.writeValueAsString(event);
         } catch (JsonProcessingException e) {

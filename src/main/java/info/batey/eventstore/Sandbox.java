@@ -7,7 +7,6 @@ import rx.Observable;
 
 public class Sandbox {
     public static void main(String[] args) throws InterruptedException {
-
         Cluster cluster = Cluster.builder().addContactPoint("localhost").build();
 
         CustomerEventDaoAsync customerEventDao = new CustomerEventDaoAsync(cluster.connect("customers"));
