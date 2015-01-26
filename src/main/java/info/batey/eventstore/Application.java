@@ -25,7 +25,6 @@ import java.util.Properties;
 @EnableAutoConfiguration
 @ComponentScan
 @EnableConfigurationProperties({CassandraConfig.class, KafkaConfig.class})
-@PropertySource({"classpath:application.yml", "classpath:override.yml"})
 public class Application {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Application.class);
