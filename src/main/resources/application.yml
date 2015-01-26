@@ -1,8 +1,0 @@
-cassandra:
-  host: localhost
-  keyspace: events
-  port: 9042
-
-kafka:
-  brokerlist: 192.168.86.10:9092
-  topic: Events

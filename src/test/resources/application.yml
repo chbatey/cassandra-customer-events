@@ -1,4 +1,0 @@
-cassandra:
-  host: localhost
-  port: 9142
-  keyspace: EventsTest
