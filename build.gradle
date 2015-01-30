@@ -9,6 +9,7 @@ jar {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -36,7 +37,12 @@ dependencies {
         exclude module: 'log4j'
         exclude module: 'slf4j-log4j12'
     }
-
+    // not in maven central yet you'll need to check it out and do gradle install
+    testCompile('info.batey.kafka:kafka-unit:0.1.0-SNAPSHOT') {
+        exclude module: 'slf4j-simple'
+        exclude module: 'log4j'
+        exclude module: 'slf4j-log4j12'
+    }
 }
 
 

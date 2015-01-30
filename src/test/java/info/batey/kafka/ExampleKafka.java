@@ -4,6 +4,7 @@ import com.datastax.driver.core.utils.UUIDs;
 import info.batey.eventstore.KafkaConfig;
 import info.batey.eventstore.dao.KafkaEventStore;
 import info.batey.eventstore.domain.CustomerEvent;
+import info.batey.kafka.unit.Kafka;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
 import kafka.serializer.StringEncoder;

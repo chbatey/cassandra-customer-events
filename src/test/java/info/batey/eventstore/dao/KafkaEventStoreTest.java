@@ -3,7 +3,7 @@ package info.batey.eventstore.dao;
 import com.google.common.collect.Lists;
 import info.batey.eventstore.KafkaConfig;
 import info.batey.eventstore.domain.CustomerEvent;
-import info.batey.kafka.Kafka;
+import info.batey.kafka.unit.Kafka;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
 import kafka.serializer.StringEncoder;

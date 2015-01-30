@@ -2,7 +2,7 @@ package info.batey.eventstore;
 
 import com.datastax.driver.core.Cluster;
 import com.google.common.collect.Lists;
-import info.batey.kafka.Kafka;
+import info.batey.kafka.unit.Kafka;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.CassandraCQLUnit;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
