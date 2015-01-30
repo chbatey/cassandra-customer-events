@@ -56,7 +56,6 @@ public class ReadApplicationIntegrationTest {
         EmbeddedCassandraServerHelper.startEmbeddedCassandra();
         CQLDataLoader cqlDataLoader = new CQLDataLoader(Cluster.builder().addContactPoint("127.0.0.1").withPort(9142).build().connect());
         cqlDataLoader.load(new ClassPathCQLDataSet("Events.cql", "eventstest"));
-
     }
 
     @AfterClass
@@ -64,9 +63,6 @@ public class ReadApplicationIntegrationTest {
         EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
     }
 
-    @Before
-    public void loadData() {
-    }
 
     private RestTemplate template = new TestRestTemplate();
 

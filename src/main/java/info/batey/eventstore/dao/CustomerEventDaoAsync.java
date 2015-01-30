@@ -40,15 +40,6 @@ public class CustomerEventDaoAsync {
         getEventsForCustomer = session.prepare("select * from customer_events where customer_id = ?");
     }
 
-    /*
-     * Synchronously gets all the events for a single customer
-     */
-    public List<CustomerEvent> getCustomerEvents(String customerId) {
-        BoundStatement boundStatement = getEventsForCustomer.bind(customerId);
-        return session.execute(boundStatement).all().stream()
-                .map(mapCustomerEvent())
-                .collect(Collectors.toList());
-    }
 
     /*
      * Async gets all the events for a single customer + transform
@@ -79,29 +70,6 @@ public class CustomerEventDaoAsync {
                 row.getString("event_type")
         ));
 
-    }
-
-    public List<CustomerEvent> getAllCustomerEvents() {
-        return session.execute("select * from customers.customer_events")
-                .all().stream()
-                .map(mapCustomerEvent())
-                .collect(Collectors.toList());
-
-    }
-
-    public List<CustomerEvent> getCustomerEventsForTime(String customerId, long startTime, long endTime) {
-        Select.Where getCustomers = QueryBuilder.select()
-                .all()
-                .from("customer_events")
-                .where(eq("customer_id", customerId))
-                .and(gt("time", UUIDs.startOf(startTime)))
-                .and(lt("time", UUIDs.endOf(endTime)));
-
-        LOGGER.info("Executing {}", getCustomers);
-
-        return session.execute(getCustomers).all().stream()
-                .map(mapCustomerEvent())
-                .collect(Collectors.toList());
     }
 
     private Function<Row, CustomerEvent> mapCustomerEvent() {
