@@ -1,7 +1,6 @@
 package info.batey.kafka;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Files;
 import kafka.admin.CreateTopicCommand;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
@@ -16,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -40,7 +41,12 @@ public class Kafka {
         zookeeper = new Zookeeper(zkPort);
         zookeeper.startup();
 
-        File logDir = Files.createTempDir();
+        File logDir;
+        try {
+            logDir = Files.createTempDirectory("kafka").toFile();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to start Kafka", e);
+        }
         logDir.deleteOnExit();
         Properties properties = new Properties();
         properties.setProperty("zookeeper.connect", zookeeperString);
