@@ -1,48 +1,37 @@
 package info.batey.eventstore.dao;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 import info.batey.eventstore.KafkaConfig;
 import info.batey.eventstore.domain.CustomerEvent;
-import info.batey.kafka.EmbeddedKafka;
-import info.batey.kafka.EmbeddedZookeeper;
-import kafka.admin.CreateTopicCommand;
-import kafka.consumer.Consumer;
-import kafka.consumer.ConsumerConfig;
-import kafka.consumer.ConsumerIterator;
-import kafka.consumer.KafkaStream;
-import kafka.javaapi.consumer.ConsumerConnector;
+import info.batey.kafka.Kafka;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
-import kafka.serializer.StringDecoder;
 import kafka.serializer.StringEncoder;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class KafkaEventStoreTest {
 
-    private static EmbeddedZookeeper embeddedZookeeper = new EmbeddedZookeeper(5000);
-    private static EmbeddedKafka embeddedKafka = new EmbeddedKafka("localhost:5000", 5001);
+    private static Kafka kafka = new Kafka(5000, 5001);
     private static String topicName = "Events";
 
     @BeforeClass
     public static void startKafka() throws Exception {
-        embeddedZookeeper.startup();
-        embeddedKafka.startup();
-        embeddedKafka.createTopic(topicName);
+        kafka.startup();
+        kafka.createTopic(topicName);
     }
 
     @AfterClass
     public static void stopKafka() throws Exception {
-        embeddedKafka.shutdown();
-        embeddedZookeeper.shutdown();
+        kafka.shutdown();
     }
 
     private KafkaEventStore underTest;
@@ -59,19 +48,32 @@ public class KafkaEventStoreTest {
 
     @Test
     public void storeCustomerEvent() throws Exception {
-        CustomerEvent customerEvent = new CustomerEvent("customerId", "staffId", "WEB", "GOLD_CUSTOMERS", "Fancy content", UUID.randomUUID(), "LOGIN");
+        //given
+        CustomerEvent customerEvent = new CustomerEvent("customerId", "staffId", "WEB", "GOLD_CUSTOMERS", "Fancy content", UUID.fromString("1368baec-0565-49da-90b7-4ab07a7d375d"), "LOGIN");
+
+        //when
         underTest.storeEvent(customerEvent);
 
-        Properties consumerProperties = new Properties();
-        consumerProperties.put("zookeeper.connect", "localhost:5000");
-        consumerProperties.put("group.id", "1");
-        ConsumerConnector javaConsumerConnector = Consumer.createJavaConsumerConnector(new ConsumerConfig(consumerProperties));
-        Map<String, List<KafkaStream<byte[], byte[]>>> events = javaConsumerConnector.createMessageStreams(ImmutableMap.of(topicName, 1));
-        List<KafkaStream<byte[], byte[]>> events1 = events.get(topicName);
+        //then
+        List<String> messages = kafka.readMessages(topicName, 1);
+        assertEquals(Lists.newArrayList("{\"group\":\"GOLD_CUSTOMERS\",\"content\":\"Fancy content\",\"time\":\"1368baec-0565-49da-90b7-4ab07a7d375d\",\"customer_id\":\"customerId\",\"staff_id\":\"staffId\",\"store_type\":\"WEB\",\"event_type\":\"LOGIN\"}"),
+                messages);
+    }
 
-        KafkaStream<byte[], byte[]> messageAndMetadatas = events1.get(0);
-        ConsumerIterator<byte[], byte[]> iterator = messageAndMetadatas.iterator();
-        assertTrue(iterator.hasNext());
-        assertEquals("msg", new String(iterator.next().message()));
+    @Test
+    public void storingMultipleEvents() throws Exception {
+        //given
+        CustomerEvent customerEvent = new CustomerEvent("customerId", "staffId", "WEB", "GOLD_CUSTOMERS", "Fancy content", UUID.fromString("1368baec-0565-49da-90b7-4ab07a7d375d"), "LOGIN");
+        CustomerEvent customerEvent2 = new CustomerEvent("event2", "staffId", "WEB", "GOLD_CUSTOMERS", "Fancy content", UUID.fromString("1368baec-0565-49da-90b7-4ab07a7d375d"), "LOGIN");
+
+        //when
+        underTest.storeEvents(customerEvent, customerEvent2);
+
+        //then
+        List<String> messages = kafka.readMessages(topicName, 2);
+        assertEquals(Lists.newArrayList(
+                        "{\"group\":\"GOLD_CUSTOMERS\",\"content\":\"Fancy content\",\"time\":\"1368baec-0565-49da-90b7-4ab07a7d375d\",\"customer_id\":\"customerId\",\"staff_id\":\"staffId\",\"store_type\":\"WEB\",\"event_type\":\"LOGIN\"}",
+                        "{\"group\":\"GOLD_CUSTOMERS\",\"content\":\"Fancy content\",\"time\":\"1368baec-0565-49da-90b7-4ab07a7d375d\",\"customer_id\":\"event2\",\"staff_id\":\"staffId\",\"store_type\":\"WEB\",\"event_type\":\"LOGIN\"}"),
+                messages);
     }
 }

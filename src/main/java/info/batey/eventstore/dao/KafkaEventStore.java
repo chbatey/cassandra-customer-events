@@ -35,4 +35,11 @@ public class KafkaEventStore implements EventStore {
         KeyedMessage<String, String> message = new KeyedMessage<>(kafkaConfig.getTopic(), event.getCustomerId(), serialisedEvent);
         producer.send(message);
     }
+
+    @Override
+    public void storeEvents(CustomerEvent... customerEvents) {
+        for (CustomerEvent customerEvent : customerEvents) {
+            storeEvent(customerEvent);
+        }
+    }
 }
