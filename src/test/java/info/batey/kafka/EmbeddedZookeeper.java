@@ -1,4 +1,5 @@
 package info.batey.kafka;
+import com.google.common.io.Files;
 import org.apache.zookeeper.server.NIOServerCnxnFactory;
 import org.apache.zookeeper.server.ServerCnxnFactory;
 import org.apache.zookeeper.server.ZooKeeperServer;
@@ -9,24 +10,25 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class EmbeddedZookeeper {
-    private int port = 2181;
-    private int tickTime = 500;
+    private int port;
 
     private ServerCnxnFactory factory;
     private File snapshotDir;
     private File logDir;
 
-    public EmbeddedZookeeper() {
-
+    public EmbeddedZookeeper(int port) {
+        this.port = port;
     }
-
 
     public void startup() throws IOException{
 
-        this.snapshotDir = TestUtils.constructTempDir("embeeded-zk/snapshot");
-        this.logDir = TestUtils.constructTempDir("embeeded-zk/log");
+        this.snapshotDir = Files.createTempDir();
+        this.logDir = Files.createTempDir();
+        this.snapshotDir.deleteOnExit();
+        this.logDir.delete();
 
         try {
+            int tickTime = 500;
             ZooKeeperServer zkServer = new ZooKeeperServer(snapshotDir, logDir, tickTime);
             this.factory = NIOServerCnxnFactory.createFactory();
             this.factory.configure(new InetSocketAddress("localhost", port), 16);
@@ -39,15 +41,5 @@ public class EmbeddedZookeeper {
 
     public void shutdown() {
         factory.shutdown();
-        try {
-            TestUtils.deleteFile(snapshotDir);
-        } catch (FileNotFoundException e) {
-            // ignore
-        }
-        try {
-            TestUtils.deleteFile(logDir);
-        } catch (FileNotFoundException e) {
-            // ignore
-        }
     }
 }

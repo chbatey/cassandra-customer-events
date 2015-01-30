@@ -32,6 +32,7 @@ public class KafkaEventStore implements EventStore {
             throw new RuntimeException("Unable to send event");
         }
         LOGGER.debug("Sending event {} to topic {}", serialisedEvent,kafkaConfig.getTopic());
-        producer.send(new KeyedMessage<>(kafkaConfig.getTopic(), event.getCustomerId(), serialisedEvent));
+        KeyedMessage<String, String> message = new KeyedMessage<>(kafkaConfig.getTopic(), event.getCustomerId(), serialisedEvent);
+        producer.send(message);
     }
 }

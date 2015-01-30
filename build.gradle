@@ -32,9 +32,10 @@ dependencies {
         exclude module: 'slf4j-log4j12'
     }
 
-    testCompile('org.apache.zookeeper:zookeeper:3.4.5') {
+    compile('org.apache.zookeeper:zookeeper:3.4.5') {
         exclude module: 'slf4j-log4j12'
     }
+
 }
 
 
