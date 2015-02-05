@@ -2,7 +2,7 @@ package info.batey.eventstore;
 
 import com.datastax.driver.core.Cluster;
 import com.google.common.collect.Lists;
-import info.batey.kafka.unit.Kafka;
+import info.batey.kafka.unit.KafkaUnit;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.CassandraCQLUnit;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
@@ -39,11 +39,11 @@ public class WriteApplicationIntegrationTest {
     @Rule
     public CassandraCQLUnit cassandraCQLUnit;
 
-    private static Kafka kafka;
+    private static KafkaUnit kafka;
 
     @BeforeClass
     public static void setup() throws Exception {
-        kafka = new Kafka(5002, BROKER_PORT);
+        kafka = new KafkaUnit(5002, BROKER_PORT);
         kafka.startup();
         EmbeddedCassandraServerHelper.startEmbeddedCassandra();
         CQLDataLoader cqlDataLoader = new CQLDataLoader(Cluster.builder().addContactPoint("127.0.0.1").withPort(9142).build().connect());

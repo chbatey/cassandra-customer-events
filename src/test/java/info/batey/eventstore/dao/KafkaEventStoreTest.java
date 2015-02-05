@@ -3,13 +3,12 @@ package info.batey.eventstore.dao;
 import com.google.common.collect.Lists;
 import info.batey.eventstore.KafkaConfig;
 import info.batey.eventstore.domain.CustomerEvent;
-import info.batey.kafka.unit.Kafka;
+import info.batey.kafka.unit.KafkaUnitRule;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
 import kafka.serializer.StringEncoder;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.List;
@@ -20,19 +19,10 @@ import static org.junit.Assert.assertEquals;
 
 public class KafkaEventStoreTest {
 
-    private static Kafka kafka = new Kafka(5000, 5001);
+    @Rule
+    public KafkaUnitRule kafkaUnit = new KafkaUnitRule(5000, 5001);
+
     private static String topicName = "Events";
-
-    @BeforeClass
-    public static void startKafka() throws Exception {
-        kafka.startup();
-        kafka.createTopic(topicName);
-    }
-
-    @AfterClass
-    public static void stopKafka() throws Exception {
-        kafka.shutdown();
-    }
 
     private KafkaEventStore underTest;
 
@@ -55,7 +45,7 @@ public class KafkaEventStoreTest {
         underTest.storeEvent(customerEvent);
 
         //then
-        List<String> messages = kafka.readMessages(topicName, 1);
+        List<String> messages = kafkaUnit.getKafkaUnit().readMessages(topicName, 1);
         assertEquals(Lists.newArrayList("{\"group\":\"GOLD_CUSTOMERS\",\"content\":\"Fancy content\",\"time\":\"1368baec-0565-49da-90b7-4ab07a7d375d\",\"customer_id\":\"customerId\",\"staff_id\":\"staffId\",\"store_type\":\"WEB\",\"event_type\":\"LOGIN\"}"),
                 messages);
     }
@@ -70,7 +60,7 @@ public class KafkaEventStoreTest {
         underTest.storeEvents(customerEvent, customerEvent2);
 
         //then
-        List<String> messages = kafka.readMessages(topicName, 2);
+        List<String> messages = kafkaUnit.getKafkaUnit().readMessages(topicName, 2);
         assertEquals(Lists.newArrayList(
                         "{\"group\":\"GOLD_CUSTOMERS\",\"content\":\"Fancy content\",\"time\":\"1368baec-0565-49da-90b7-4ab07a7d375d\",\"customer_id\":\"customerId\",\"staff_id\":\"staffId\",\"store_type\":\"WEB\",\"event_type\":\"LOGIN\"}",
                         "{\"group\":\"GOLD_CUSTOMERS\",\"content\":\"Fancy content\",\"time\":\"1368baec-0565-49da-90b7-4ab07a7d375d\",\"customer_id\":\"event2\",\"staff_id\":\"staffId\",\"store_type\":\"WEB\",\"event_type\":\"LOGIN\"}"),
