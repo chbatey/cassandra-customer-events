@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -50,7 +51,6 @@ public class CustomerEventDao {
                 .all().stream()
                 .map(mapCustomerEvent())
                 .collect(Collectors.toList());
-
     }
 
     public List<CustomerEvent> getCustomerEventsForTime(String customerId, long startTime, long endTime) {
